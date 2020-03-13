@@ -36,7 +36,7 @@ app.get("/", function(req, res) {
 });
 
 //this is a route that will send the user to the make a reservation page
-app.get("/add", function(req, res) {
+app.get("/api/reserve", function(req, res) {
   res.sendFile(path.join(__dirname, "reserve.html"));
 });
 
@@ -80,16 +80,19 @@ app.post("/api/reserve", function(req, res) {
   // req.body hosts is equal to the JSON post sent from the user
   // This works because of our body parsing middleware
   var newReservation = req.body;
-
+  var resAvailible = true;
   // Using a RegEx Pattern to remove spaces from newCharacter
   // You can read more about RegEx Patterns later https://www.regexbuddy.com/regex.html
   newReservation.uniqueID = IDRef;
   IDRef++;
 
-  //console.log(newReservation);
-
+  console.log(newReservation);
   resturauntGuests.push(newReservation);
 
+  if (resturauntGuests.length > 5) {
+      resAvailible = false;
+  }
+  res.json(resAvailible);
 });
 
 // Starts the server to begin listening
